@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Customer Reviews — {{ biz.name }}{% endblock %}
+{% block content %}
+
+<div class="page-head" style="margin:-18px 0 0;">
+  <div class="container">
+    <span class="eyebrow">CUSTOMER REVIEWS</span>
+    <h1>What travellers say about {{ biz.name }}</h1>
+    <div class="breadcrumb"><a href="{{ url_for('index') }}">Home</a> / Reviews</div>
+  </div>
+</div>
+
+<section class="section" style="padding-top:52px;">
+  <div class="container">
+
+    <div class="rating-summary">
+      <div class="big">{{ avg_rating }}</div>
+      <div>
+        <div class="review-stars">
+          {% for i in range(avg_rating|round(0,'floor')|int) %}<i class="fa-solid fa-star"></i>{% endfor %}
+          {% for i in range(5 - (avg_rating|round(0,'floor')|int)) %}<i class="fa-regular fa-star"></i>{% endfor %}
+        </div>
+        <div class="form-note">Based on {{ total }} verified review{{ 's' if total != 1 else '' }}</div>
+      </div>
+      <div style="flex:1; min-width:220px;">
+        {% for star, count in breakdown.items() %}
+        <div class="bar-row">
+          <span>{{ star }} star</span>
+          <div class="bar-track"><div class="bar-fill" style="width:{{ (count / total * 100) if total else 0 }}%;"></div></div>
+          <span>{{ count }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="grid-2" style="grid-template-columns:1.5fr 1fr; align-items:flex-start;">
+      <div>
+        <h3 style="margin-bottom:1em;">All Reviews</h3>
+        <div style="display:flex; flex-direction:column; gap:18px;">
+          {% for r in reviews %}
+          <div class="review-card">
+            <div class="review-stars">
+              {% for i in range(r.rating) %}<i class="fa-solid fa-star"></i>{% endfor %}
+              {% for i in range(5 - r.rating) %}<i class="fa-regular fa-star"></i>{% endfor %}
+            </div>
+            <p>&ldquo;{{ r.message }}&rdquo;</p>
+            <div class="review-name">{{ r.customer_name }}</div>
+            <div class="review-role">{{ r.trip_route or "Verified traveller" }} &middot; {{ r.created_at.strftime('%d %b %Y') }}</div>
+          </div>
+          {% else %}
+          <div class="empty-state">
+            <i class="fa-regular fa-comment-dots"></i>
+            No reviews yet. Be the first to share your experience!
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="form-card">
+        <h3 style="margin-bottom:.2em;">Share Your Experience</h3>
+        <p class="form-note" style="margin-bottom:1.4em;">Your review will appear after a quick approval.</p>
+        <form method="POST" action="{{ url_for('reviews') }}" data-validate>
+          <div class="form-group">
+            <label for="customer_name">Your Name *</label>
+            <input type="text" id="customer_name" name="customer_name" class="form-control" required placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label for="trip_route">Trip Route</label>
+            <input type="text" id="trip_route" name="trip_route" class="form-control" placeholder="e.g. Chennai to Madurai">
+          </div>
+          <div class="form-group">
+            <label>Your Rating *</label>
+            <div class="star-select">
+              <i class="fa-solid fa-star" data-val="1"></i>
+              <i class="fa-solid fa-star" data-val="2"></i>
+              <i class="fa-solid fa-star" data-val="3"></i>
+              <i class="fa-solid fa-star" data-val="4"></i>
+              <i class="fa-solid fa-star" data-val="5"></i>
+            </div>
+            <input type="hidden" id="rating" name="rating" value="5">
+          </div>
+          <div class="form-group">
+            <label for="message">Your Review *</label>
+            <textarea id="message" name="message" class="form-control" required placeholder="Tell us about your trip..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane"></i> Submit Review</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

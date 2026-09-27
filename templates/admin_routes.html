@@ -1,0 +1,113 @@
+{% extends "admin_base.html" %}
+{% from "route_images.html" import route_image_source %}
+{% block title %}Popular Routes{% endblock %}
+{% block page_title %}Popular Routes{% endblock %}
+{% block admin_content %}
+
+<div class="panel">
+  <div class="panel-head">
+    <h3>Add a New Route</h3>
+  </div>
+  <div class="panel-body">
+    <form method="POST" action="{{ url_for('add_route') }}" enctype="multipart/form-data" data-validate>
+      <div class="form-row" style="grid-template-columns:repeat(4,1fr);">
+        <div class="form-group">
+          <label>Route Name *</label>
+          <input type="text" name="route_name" class="form-control" required placeholder="e.g. Chennai to Bangalore">
+        </div>
+        <div class="form-group">
+          <label>Pickup City *</label>
+          <input type="text" name="pickup_city" class="form-control" required placeholder="e.g. Chennai">
+        </div>
+        <div class="form-group">
+          <label>Drop City *</label>
+          <input type="text" name="drop_city" class="form-control" required placeholder="e.g. Bangalore">
+        </div>
+        <div class="form-group">
+          <label>Price (₹) *</label>
+          <input type="number" step="0.5" name="price" class="form-control" required value="0">
+        </div>
+      </div>
+      <div class="form-row" style="grid-template-columns:repeat(4,1fr); align-items:end;">
+        <div class="form-group">
+          <label>Duration *</label>
+          <input type="text" name="duration_text" class="form-control" required placeholder="6-7 hours">
+        </div>
+        <div class="form-group">
+          <label>Distance (km) *</label>
+          <input type="number" name="distance_km" class="form-control" required value="0">
+        </div>
+        <div class="form-group">
+          <label>Display Order</label>
+          <input type="number" name="sort_order" class="form-control" value="0">
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Route</button>
+      </div>
+      <div class="route-add-options">
+        <div class="form-group">
+          <label for="route_image">Choose Image</label>
+          <input type="file" id="route_image" name="route_image" class="form-control" accept="image/jpeg,image/png,image/webp">
+          <small class="form-note">Select a photo from your device. JPG, PNG, or WebP, up to 5 MB. Leave blank to use built-in artwork.</small>
+        </div>
+        <label class="route-active-toggle"><input type="checkbox" name="is_active" value="1" checked> Show on website</label>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head"><h3>Manage Routes ({{ routes|length }})</h3></div>
+  <div style="overflow-x:auto;">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Route</th>
+          <th>Pickup</th>
+          <th>Drop</th>
+          <th>Route Image</th>
+          <th>Duration</th>
+          <th>Distance</th>
+          <th>Price</th>
+          <th>Order</th>
+          <th>Show on website</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for route in routes %}
+        <tr>
+          <form method="POST" action="{{ url_for('edit_route', route_id=route.id) }}" enctype="multipart/form-data" id="edit-route-form-{{ route.id }}" style="display:contents;">
+            <td><input type="text" name="route_name" value="{{ route.route_name }}" class="form-control"></td>
+            <td><input type="text" name="pickup_city" value="{{ route.pickup_city }}" class="form-control"></td>
+            <td><input type="text" name="drop_city" value="{{ route.drop_city }}" class="form-control"></td>
+            <td>
+              <div class="route-manage-image">
+                <img src="{{ route_image_source(route) }}" alt="{{ route.route_name }} current image">
+                <label for="route-image-{{ route.id }}">Replace photo</label>
+                <input type="file" id="route-image-{{ route.id }}" name="route_image" accept="image/jpeg,image/png,image/webp">
+              </div>
+            </td>
+            <td><input type="text" name="duration_text" value="{{ route.duration_text }}" class="form-control"></td>
+            <td><input type="number" name="distance_km" value="{{ route.distance_km }}" class="form-control" style="width:90px;"></td>
+            <td><input type="number" step="0.5" name="price" value="{{ route.price }}" class="form-control" style="width:110px;"></td>
+            <td><input type="number" name="sort_order" value="{{ route.sort_order }}" class="form-control" style="width:80px;"></td>
+            <td><label class="route-active-toggle"><input type="checkbox" name="is_active" value="1" {{ 'checked' if route.is_active }}><span>Show</span></label></td>
+            <td>
+              <div class="action-row">
+                <button type="submit" class="icon-btn" title="Save changes"><i class="fa-solid fa-floppy-disk"></i></button>
+                {% if route.is_active %}
+                <button type="submit" class="icon-btn" title="Remove route" formaction="{{ url_for('delete_route', route_id=route.id) }}" formmethod="POST" data-confirm="Remove {{ route.route_name }} from the popular routes?"><i class="fa-solid fa-trash"></i></button>
+                {% endif %}
+              </div>
+            </td>
+          </form>
+        </tr>
+        {% else %}
+        <tr><td colspan="10"><div class="empty-state"><i class="fa-solid fa-route"></i>No routes added yet.</div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

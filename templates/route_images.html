@@ -1,0 +1,20 @@
+{% macro route_image_source(route) -%}
+  {%- set saved_image = (route.image_url or '')|trim -%}
+  {%- set normalized_saved_image = saved_image|replace('.svg', '.jpg') -%}
+  {%- set destination = (route.drop_city or route.pickup_city or '')|lower -%}
+  {%- set route_text = ((route.route_name or '') + ' ' + destination)|lower -%}
+  {%- set is_hill = destination in ['ooty', 'kodaikanal', 'yercaud', 'yelagiri', 'nilgiris', 'coimbatore', 'bangalore'] or 'hill' in route_text or 'mountain' in route_text -%}
+  {%- set is_temple = destination in ['thiruvannamalai', 'madurai', 'thanjavur', 'kumbakonam', 'tiruchendur', 'trichy', 'kanchipuram', 'palani', 'rameswaram', 'kanyakumari'] or 'temple' in route_text or 'murugan' in route_text or 'kailasanathar' in route_text or 'arunachaleswarar' in route_text or 'meenakshi' in route_text -%}
+  {%- set is_coast = destination in ['chennai', 'cuddalore', 'mahabalipuram', 'puducherry', 'beach', 'sea', 'shore', 'coast'] or 'coast' in route_text or 'beach' in route_text or 'harbor' in route_text -%}
+  {%- if normalized_saved_image -%}
+    {{- normalized_saved_image -}}
+  {%- elif is_hill -%}
+    {{- url_for('static', filename='img/route-hills.jpg', v='3') -}}
+  {%- elif is_temple -%}
+    {{- url_for('static', filename='img/route-temple.jpg', v='3') -}}
+  {%- elif is_coast -%}
+    {{- url_for('static', filename='img/route-coast.jpg', v='3') -}}
+  {%- else -%}
+    {{- url_for('static', filename='img/route-city.jpg', v='3') -}}
+  {%- endif -%}
+{%- endmacro %}

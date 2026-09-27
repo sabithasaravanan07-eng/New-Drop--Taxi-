@@ -1,0 +1,93 @@
+{% extends "admin_base.html" %}
+{% block title %}Fleet{% endblock %}
+{% block page_title %}Fleet / Cars{% endblock %}
+{% block admin_content %}
+
+<div class="panel">
+  <div class="panel-head">
+    <h3>Add a New Car</h3>
+  </div>
+  <div class="panel-body">
+    <form method="POST" action="{{ url_for('add_car') }}" data-validate>
+      <div class="form-row" style="grid-template-columns:repeat(4,1fr);">
+        <div class="form-group">
+          <label>Car Name *</label>
+          <input type="text" name="name" class="form-control" required placeholder="e.g. Swift Dzire">
+        </div>
+        <div class="form-group">
+          <label>Car Type *</label>
+          <input type="text" name="car_type" class="form-control" required placeholder="e.g. Sedan">
+        </div>
+        <div class="form-group">
+          <label>Seats</label>
+          <input type="number" name="seats" class="form-control" value="4" min="1" max="30">
+        </div>
+        <div class="form-group">
+          <label>Price / km (₹)</label>
+          <input type="number" step="0.5" name="price_per_km" class="form-control" value="12">
+        </div>
+      </div>
+      <div class="form-row" style="grid-template-columns:repeat(4,1fr); align-items:end;">
+        <div class="form-group">
+          <label>Base Fare (₹)</label>
+          <input type="number" step="0.5" name="base_fare" class="form-control" value="500">
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select name="status" class="form-control">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="form-group" style="display:flex; align-items:center; gap:.6em; padding-top:1.6em;">
+          <input type="checkbox" name="ac" id="ac" checked style="width:18px; height:18px;">
+          <label for="ac" style="margin:0;">Air Conditioned</label>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Car</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head"><h3>{{ cars|length }} Car{{ 's' if cars|length != 1 else '' }} in Fleet</h3></div>
+  <div style="overflow-x:auto;">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Type</th><th>Seats</th><th>Rate</th><th>Base Fare</th><th>AC</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for car in cars %}
+        <tr>
+          <form method="POST" action="{{ url_for('edit_car', car_id=car.id) }}" id="edit-form-{{ car.id }}">
+          <td><input type="text" name="name" value="{{ car.name }}" class="form-control" form="edit-form-{{ car.id }}"></td>
+          <td><input type="text" name="car_type" value="{{ car.car_type }}" class="form-control" form="edit-form-{{ car.id }}"></td>
+          <td><input type="number" name="seats" value="{{ car.seats }}" class="form-control" style="width:70px;" form="edit-form-{{ car.id }}"></td>
+          <td><input type="number" step="0.5" name="price_per_km" value="{{ car.price_per_km }}" class="form-control" style="width:90px;" form="edit-form-{{ car.id }}"></td>
+          <td><input type="number" step="0.5" name="base_fare" value="{{ car.base_fare }}" class="form-control" style="width:90px;" form="edit-form-{{ car.id }}"></td>
+          <td style="text-align:center;"><input type="checkbox" name="ac" {{ 'checked' if car.ac }} form="edit-form-{{ car.id }}"></td>
+          <td>
+            <select name="status" class="select-status" form="edit-form-{{ car.id }}">
+              <option value="active" {{ 'selected' if car.status=='active' }}>Active</option>
+              <option value="inactive" {{ 'selected' if car.status=='inactive' }}>Inactive</option>
+            </select>
+          </td>
+          <td>
+            <div class="action-row">
+              <button type="submit" class="icon-btn" title="Save changes" form="edit-form-{{ car.id }}"><i class="fa-solid fa-floppy-disk"></i></button>
+              <button type="submit" class="icon-btn" title="Delete car" form="delete-form-{{ car.id }}"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </td>
+          </form>
+        </tr>
+        {% else %}
+        <tr><td colspan="8"><div class="empty-state"><i class="fa-solid fa-car"></i>No cars added yet.</div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% for car in cars %}
+<form method="POST" action="{{ url_for('delete_car', car_id=car.id) }}" id="delete-form-{{ car.id }}" data-confirm="Remove {{ car.name }} from the fleet?" style="display:none;"></form>
+{% endfor %}
+
+{% endblock %}

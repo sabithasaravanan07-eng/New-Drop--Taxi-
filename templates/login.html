@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login — {{ 'New Drop Taxi' if biz.name == 'SD Travels' else biz.name }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="brand login-brand">
+      <span class="login-brand-logo"><img src="{{ url_for('static', filename='img/new-drop-taxi-logo.svg') }}" alt="New Drop Taxi logo"></span>
+      <span class="login-brand-name">New Drop <strong>Taxi</strong><small>ADMIN PANEL</small></span>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'error' if category=='error' else category }}">
+            <i class="fa-solid {{ 'fa-circle-check' if category=='success' else 'fa-circle-exclamation' }}"></i>
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('login') }}" data-validate>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" class="form-control" required autofocus placeholder="admin">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" class="form-control" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-right-to-bracket"></i> Log In</button>
+    </form>
+    <p class="form-note" style="text-align:center; margin-top:1.4em;">
+      <a href="{{ url_for('index') }}" style="color:var(--pine);"><i class="fa-solid fa-arrow-left"></i> Back to website</a>
+    </p>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,86 @@
+{% extends "admin_base.html" %}
+{% block title %}Bookings{% endblock %}
+{% block page_title %}Bookings{% endblock %}
+{% block admin_content %}
+
+<div class="filter-bar">
+  <form method="GET" action="{{ url_for('admin_bookings') }}" class="booking-search">
+    <input type="search" name="q" value="{{ search }}" placeholder="Search customer, phone or route" aria-label="Search bookings">
+    <select name="status" aria-label="Filter by status">
+      <option value="">All statuses</option>
+      {% for status in ('pending', 'confirmed', 'completed', 'cancelled') %}
+      <option value="{{ status }}" {{ 'selected' if status_filter == status }}>{{ status|capitalize }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-dark btn-sm"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+  </form>
+</div>
+
+<div class="panel">
+  <div class="panel-head">
+    <h3>{{ bookings|length }} Booking{{ 's' if bookings|length != 1 else '' }}</h3>
+  </div>
+  <div style="overflow-x:auto;">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Customer</th><th>Route</th><th>Travel Date / Time</th><th>Created</th><th>Vehicle</th><th>Status</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in bookings %}
+        <tr>
+          <td>
+            <strong>{{ b.customer_name }}</strong><br>
+            <span class="form-note"><i class="fa-solid fa-phone"></i> {{ b.phone }}</span>
+            {% if b.email %}<br><span class="form-note">{{ b.email }}</span>{% endif %}
+          </td>
+          <td>{{ b.pickup_location }} <i class="fa-solid fa-arrow-right" style="font-size:.7em;"></i> {{ b.drop_location }}
+            {% if b.notes %}<br><span class="form-note">{{ b.notes[:50] }}{% if b.notes|length > 50 %}...{% endif %}</span>{% endif %}
+          </td>
+          <td>{{ b.pickup_date.strftime('%d %b %Y') }}<br><span class="form-note">{{ b.pickup_time }}</span></td>
+          <td><span class="form-note">{{ b.created_at.strftime('%d %b %Y, %H:%M') }}</span></td>
+          <td>{{ b.car_name or 'To be assigned' }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('update_booking_status', booking_id=b.id) }}" class="status-form">
+              <select name="status" class="select-status" aria-label="Booking status" onchange="this.form.submit()">
+                {% for status in ('pending', 'confirmed', 'completed', 'cancelled') %}
+                <option value="{{ status }}" {{ 'selected' if b.status == status }}>{{ status|capitalize }}</option>
+                {% endfor %}
+              </select>
+            </form>
+          </td>
+          <td>
+            <div class="action-row">
+              <a href="tel:{{ b.phone }}" class="icon-btn" title="Call customer"><i class="fa-solid fa-phone"></i></a>
+              <details class="booking-edit">
+                <summary class="icon-btn" title="Edit booking"><i class="fa-solid fa-pen"></i></summary>
+                <form method="POST" action="{{ url_for('edit_booking', booking_id=b.id) }}" class="booking-edit-form">
+                  <input name="customer_name" value="{{ b.customer_name }}" required aria-label="Customer name">
+                  <input name="phone" value="{{ b.phone }}" required aria-label="Phone">
+                  <input name="pickup_location" value="{{ b.pickup_location }}" required aria-label="Pickup location">
+                  <input name="drop_location" value="{{ b.drop_location }}" required aria-label="Drop location">
+                  <input type="date" name="pickup_date" value="{{ b.pickup_date.strftime('%Y-%m-%d') }}" required aria-label="Pickup date">
+                  <input type="time" name="pickup_time" value="{{ b.pickup_time }}" required aria-label="Pickup time">
+                  <input type="number" name="passengers" value="{{ b.passengers }}" min="1" max="20" required aria-label="Passengers">
+                  <input name="email" value="{{ b.email or '' }}" type="email" aria-label="Email">
+                  <textarea name="notes" aria-label="Notes">{{ b.notes or '' }}</textarea>
+                  <input type="hidden" name="status" value="{{ b.status }}">
+                  <button type="submit" class="btn btn-primary btn-sm">Save details</button>
+                </form>
+              </details>
+              <form method="POST" action="{{ url_for('delete_booking', booking_id=b.id) }}" data-confirm="Delete this booking permanently?">
+                <button type="submit" class="icon-btn" title="Delete"><i class="fa-solid fa-trash"></i></button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7"><div class="empty-state"><i class="fa-regular fa-folder-open"></i>No bookings found.</div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

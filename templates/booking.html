@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}Book a Car — {{ biz.name }}{% endblock %}
+{% block content %}
+
+<div class="page-head" style="margin:-18px 0 0;">
+  <div class="container">
+    <span class="eyebrow">BOOK A CAR</span>
+    <h1>Plan your trip across Tamil Nadu</h1>
+    <div class="breadcrumb"><a href="{{ url_for('index') }}">Home</a> / Book a Car</div>
+  </div>
+</div>
+
+<section class="section" style="padding-top:52px;">
+  <div class="container">
+    <div class="grid-2" style="grid-template-columns:1.4fr .9fr; align-items:flex-start;">
+
+      <div class="form-card">
+        <h3 style="margin-bottom:.2em;">Trip Details</h3>
+        <p class="form-note" style="margin-bottom:1.6em;">Fields marked * are required. We'll call you to confirm the fare and driver.</p>
+
+        <form method="POST" action="{{ url_for('booking') }}" data-validate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="customer_name">Full Name *</label>
+              <input type="text" id="customer_name" name="customer_name" class="form-control" required
+                     value="{{ form.customer_name or '' }}" placeholder="Your name">
+            </div>
+            <div class="form-group">
+              <label for="phone">Mobile Number *</label>
+              <input type="tel" id="phone" name="phone" class="form-control" required pattern="[0-9]{10}"
+                     value="{{ form.phone or '' }}" placeholder="10-digit mobile number">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email (optional)</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="you@example.com">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pickup_location">Pickup Location *</label>
+              <input type="text" id="pickup_location" name="pickup_location" class="form-control" required
+                value="{{ form.pickup_location or request.args.get('pickup_location','') }}" placeholder="e.g. Chennai">
+            </div>
+            <div class="form-group">
+              <label for="drop_location">Drop Location *</label>
+              <input type="text" id="drop_location" name="drop_location" class="form-control" required
+                value="{{ form.drop_location or request.args.get('drop_location','') }}" placeholder="e.g. Madurai">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pickup_date">Pickup Date *</label>
+              <input type="date" id="pickup_date" name="pickup_date" class="form-control" required
+                value="{{ form.pickup_date or request.args.get('pickup_date','') }}">
+            </div>
+            <div class="form-group">
+              <label for="pickup_time">Pickup Time *</label>
+              <input type="time" id="pickup_time" name="pickup_time" class="form-control" required value="{{ form.pickup_time or '' }}">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="trip_type">Trip Type *</label>
+              <select id="trip_type" name="trip_type" class="form-control" required>
+                <option value="one_way">One Way</option>
+                <option value="round_trip">Round Trip</option>
+                <option value="local">Local (within city)</option>
+                <option value="airport">Airport Transfer</option>
+              </select>
+            </div>
+            <div class="form-group" id="return_date_wrap" style="display:none;">
+              <label for="return_date">Return Date</label>
+              <input type="date" id="return_date" name="return_date" class="form-control">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="passengers">Number of Passengers</label>
+            <input type="number" id="passengers" name="passengers" class="form-control" min="1" max="20" value="{{ form.passengers or request.args.get('passengers', '1') }}">
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Additional Notes</label>
+            <textarea id="notes" name="notes" class="form-control" placeholder="Any special requirements, luggage details, temple tour stops, etc."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block"><i class="fa-solid fa-paper-plane"></i> Submit Booking Request</button>
+        </form>
+      </div>
+
+      <div>
+        <div class="feature-card accent">
+          <div class="ico"><i class="fa-solid fa-phone-volume"></i></div>
+
+          <div class="form-group">
+            <label for="car_id">Preferred Vehicle</label>
+            <select id="car_id" name="car_id" class="form-control">
+              <option value="">Let us recommend a vehicle</option>
+              {% for car in cars %}
+              <option value="{{ car.id }}" {{ 'selected' if (form.car_id or request.args.get('car_id'))|string == car.id|string }}>
+                {{ car.name }} · {{ car.seats }} seats{% if car.ac %} · AC{% endif %}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+          <h3>Prefer to talk it through?</h3>
+          <p>Call {{ biz.owner }} directly for custom itineraries, temple tours or multi-day packages.</p>
+          <a href="tel:{{ biz.call_number }}" class="btn btn-primary btn-block">Call {{ biz.mobile }}</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% endblock %}

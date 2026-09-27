@@ -1,0 +1,27 @@
+{% from "route_images.html" import route_image_source %}
+{% for route in routes %}
+  <article class="route-card">
+    <div class="route-image">
+      <img class="route-photo" src="{{ route_image_source(route) }}" alt="{{ route.route_name }} travel scene">
+      <span class="tag-popular">Popular</span>
+    </div>
+    <div class="route-body">
+      <h3>{{ route.route_name }}</h3>
+      <div class="route-meta">
+        <div class="meta-row">
+          <span class="label">Starting fare</span>
+          <span class="fare">₹ {{ '{:,.0f}'.format(route.price) }}</span>
+        </div>
+        <div class="meta-inline">
+          <span>{{ route.duration_text }}</span>
+          <span>{{ route.distance_km }} km</span>
+        </div>
+      </div>
+      <div class="route-actions">
+        <a href="{{ url_for('booking', pickup_location=route.pickup_city, drop_location=route.drop_city) }}" class="btn btn-light">Details</a>
+        <a href="{{ url_for('booking', pickup_location=route.pickup_city, drop_location=route.drop_city, car_id='') }}" class="btn btn-primary-orange">Book Now</a>
+      </div>
+      <a href="tel:{{ biz.call_number }}" class="btn btn-call">Call Us</a>
+    </div>
+  </article>
+{% endfor %}

@@ -1,0 +1,92 @@
+{% extends "admin_base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block admin_content %}
+
+<div class="stat-grid">
+  <div class="stat-card c1">
+    <div class="top">
+      <div><div class="label">Total Bookings</div><div class="value">{{ stats.total_bookings or 0 }}</div></div>
+      <div class="ico"><i class="fa-solid fa-calendar-check"></i></div>
+    </div>
+  </div>
+  <div class="stat-card c2">
+    <div class="top">
+      <div><div class="label">Today's Pickups</div><div class="value">{{ stats.today_bookings or 0 }}</div></div>
+      <div class="ico"><i class="fa-solid fa-clock"></i></div>
+    </div>
+  </div>
+  <div class="stat-card c3">
+    <div class="top">
+      <div><div class="label">Pending</div><div class="value">{{ stats.pending_bookings or 0 }}</div></div>
+      <div class="ico"><i class="fa-solid fa-hourglass-half"></i></div>
+    </div>
+  </div>
+  <div class="stat-card c4">
+    <div class="top">
+      <div><div class="label">Confirmed</div><div class="value">{{ stats.confirmed_bookings or 0 }}</div></div>
+      <div class="ico"><i class="fa-solid fa-circle-check"></i></div>
+    </div>
+  </div>
+  <div class="stat-card c1">
+    <div class="top">
+      <div><div class="label">Completed</div><div class="value">{{ stats.completed_bookings or 0 }}</div></div>
+      <div class="ico"><i class="fa-solid fa-flag-checkered"></i></div>
+    </div>
+  </div>
+  <div class="stat-card c3">
+    <div class="top">
+      <div><div class="label">Cancelled</div><div class="value">{{ stats.cancelled_bookings or 0 }}</div></div>
+      <div class="ico"><i class="fa-solid fa-ban"></i></div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head">
+    <h3>Recent Bookings</h3>
+    <a href="{{ url_for('admin_bookings') }}" class="btn btn-ghost btn-sm">View All</a>
+  </div>
+  <div style="overflow-x:auto;">
+    <table class="data-table">
+      <thead><tr><th>Customer</th><th>Route</th><th>Date</th></tr></thead>
+      <tbody>
+        {% for b in recent_bookings %}
+        <tr>
+          <td><strong>{{ b.customer_name }}</strong><br><span class="form-note">{{ b.phone }}</span></td>
+          <td>{{ b.pickup_location }} <i class="fa-solid fa-arrow-right" style="font-size:.7em; color:var(--ink-soft);"></i> {{ b.drop_location }}</td>
+          <td>{{ b.pickup_date.strftime('%d %b %Y') }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3"><div class="empty-state"><i class="fa-regular fa-folder-open"></i>No bookings yet.</div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head">
+    <h3>Recent Reviews</h3>
+    <a href="{{ url_for('admin_reviews') }}" class="btn btn-ghost btn-sm">View All ({{ stats.pending_reviews or 0 }} pending)</a>
+  </div>
+  <div style="overflow-x:auto;">
+    <table class="data-table">
+      <thead><tr><th>Customer</th><th>Rating</th><th>Review</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for r in recent_reviews %}
+        <tr>
+          <td>{{ r.customer_name }}</td>
+          <td>{{ r.rating }} <i class="fa-solid fa-star" style="color:var(--marigold);"></i></td>
+          <td style="max-width:320px;">{{ r.message[:80] }}{% if r.message|length > 80 %}...{% endif %}</td>
+          <td><span class="badge badge-{{ 'approved' if r.status=='approved' else 'pending' }}">{{ r.status|capitalize }}</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4"><div class="empty-state"><i class="fa-regular fa-comment-dots"></i>No reviews yet.</div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

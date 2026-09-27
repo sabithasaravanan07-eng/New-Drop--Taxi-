@@ -1,0 +1,51 @@
+{% extends "admin_base.html" %}
+{% block title %}Reviews{% endblock %}
+{% block page_title %}Reviews{% endblock %}
+{% block admin_content %}
+
+<div class="filter-bar">
+  <a href="{{ url_for('admin_reviews') }}" class="btn btn-sm {{ 'btn-dark' if not status_filter else 'btn-ghost' }}">All</a>
+  <a href="{{ url_for('admin_reviews', status='pending') }}" class="btn btn-sm {{ 'btn-dark' if status_filter=='pending' else 'btn-ghost' }}">Pending</a>
+  <a href="{{ url_for('admin_reviews', status='approved') }}" class="btn btn-sm {{ 'btn-dark' if status_filter=='approved' else 'btn-ghost' }}">Approved</a>
+</div>
+
+<div class="panel">
+  <div class="panel-head"><h3>{{ reviews|length }} Review{{ 's' if reviews|length != 1 else '' }}</h3></div>
+  <div style="overflow-x:auto;">
+    <table class="data-table">
+      <thead><tr><th>Customer</th><th>Rating</th><th>Route</th><th>Review</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for r in reviews %}
+        <tr>
+          <td>{{ r.customer_name }}<br><span class="form-note">{{ r.created_at.strftime('%d %b %Y') }}</span></td>
+          <td>{{ r.rating }} <i class="fa-solid fa-star" style="color:var(--marigold);"></i></td>
+          <td>{{ r.trip_route or '—' }}</td>
+          <td style="max-width:340px;">{{ r.message }}</td>
+          <td><span class="badge badge-{{ r.status }}">{{ r.status|capitalize }}</span></td>
+          <td>
+            <div class="action-row">
+              {% if r.status != 'approved' %}
+              <form method="POST" action="{{ url_for('approve_review', review_id=r.id) }}">
+                <button type="submit" class="icon-btn" title="Approve"><i class="fa-solid fa-check"></i></button>
+              </form>
+              {% endif %}
+              {% if r.status == 'approved' %}
+              <form method="POST" action="{{ url_for('reject_review', review_id=r.id) }}">
+                <button type="submit" class="icon-btn" title="Hide review"><i class="fa-solid fa-eye-slash"></i></button>
+              </form>
+              {% endif %}
+              <form method="POST" action="{{ url_for('delete_review', review_id=r.id) }}" data-confirm="Delete this review permanently?">
+                <button type="submit" class="icon-btn" title="Delete"><i class="fa-solid fa-trash"></i></button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6"><div class="empty-state"><i class="fa-regular fa-comment-dots"></i>No reviews found.</div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

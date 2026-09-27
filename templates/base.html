@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{{ 'New Drop Taxi' if biz.name == 'SD Travels' else biz.name }} — Car Booking Across Tamil Nadu{% endblock %}</title>
+<meta name="description" content="{{ biz.name }} offers reliable outstation, local and airport car rental services {{ biz.area }}. Book your ride online in minutes.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% block extra_head %}{% endblock %}
+</head>
+<body class="landing-body">
+
+<header class="site-header">
+  <div class="container site-header-inner">
+    <a href="{{ url_for('index') }}" class="brand-mark-wrap">
+      <div class="brand-icon">
+        <img src="{{ url_for('static', filename='img/new-drop-taxi-logo.svg') }}" alt="New Drop Taxi logo" />
+      </div>
+      <span class="brand-header-name">New Drop <strong>Taxi</strong></span>
+    </a>
+
+    <button class="nav-toggle" aria-label="Toggle menu"><i class="fa-solid fa-bars"></i></button>
+
+    <nav class="nav-links">
+      <a href="{{ url_for('index') }}" class="active">Home</a>
+      <a href="#">Tariff</a>
+      <a href="#">Services</a>
+      <a href="#">Cities</a>
+      <a href="#">Routes</a>
+      <a href="#">Contact</a>
+    </nav>
+
+    <div class="site-header-actions">
+      <a href="{{ url_for('booking') }}" class="btn btn-primary btn-orange">Book Now</a>
+      <div class="header-contact-actions">
+        {% if biz.mobile %}
+        <a href="tel:{{ biz.call_number }}" class="call-pill"><i class="fa-solid fa-phone"></i><span>+91 {{ biz.mobile }}</span></a>
+        {% else %}
+        <span class="call-pill header-contact-unconfigured" aria-disabled="true" title="Add a mobile number in Admin Settings"><i class="fa-solid fa-phone"></i><span>Call Us</span></span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container" style="padding-top:18px;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'error' if category=='error' else category }}" data-autohide>
+            <i class="fa-solid {{ 'fa-circle-check' if category=='success' else 'fa-circle-exclamation' }}"></i>
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer" id="contact">
+  <div class="container footer-shell">
+    <div class="footer-grid">
+      <div class="footer-brand-block">
+        <h3>{{ 'New Drop Taxi' if biz.name == 'SD Travels' else biz.name }}</h3>
+        <p>{{ biz.tagline or 'Your trusted partner for comfortable and reliable outstation cab services.' }}</p>
+        <div class="footer-line"></div>
+      </div>
+
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Home</a></li>
+          <li><a href="#">Tariff</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Cities</a></li>
+          <li><a href="#">Routes</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Service Areas</h4>
+        <ul>
+          <li>{{ biz.area or 'Tamil Nadu' }}</li>
+          <li>Chennai</li>
+          <li>Coimbatore</li>
+          <li>Madurai</li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Contact Us</h4>
+        <ul>
+          <li><span class="contact-icon"><i class="fa-solid fa-phone"></i></span> +91 {{ biz.mobile }}</li>
+          {% if biz.email %}<li><span class="contact-icon"><i class="fa-solid fa-envelope"></i></span> <a href="mailto:{{ biz.email }}">{{ biz.email }}</a></li>{% endif %}
+          <li><span class="contact-icon"><i class="fa-solid fa-location-dot"></i></span> {{ biz.address or biz.area }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom-row">
+      <div class="copy">© {{ current_year }} {{ 'New Drop Taxi' if biz.name == 'SD Travels' else biz.name }}. All rights reserved.</div>
+      <div class="policy-links"><a href="#">Privacy Policy</a> <a href="#">Terms and Conditions</a> <a href="#">Cancellation Policy</a></div>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/91{{ biz.whatsapp }}" class="whatsapp-float" title="Chat on WhatsApp">
+  <i class="fa-brands fa-whatsapp"></i>
+</a>
+<a href="#" class="scroll-top" aria-label="Scroll to top"><i class="fa-solid fa-arrow-up"></i></a>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/firebase.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

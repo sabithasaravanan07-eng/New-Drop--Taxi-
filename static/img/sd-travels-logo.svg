@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 180" role="img" aria-labelledby="title">
+  <title id="title">SD Travels</title>
+  <defs>
+    <linearGradient id="gold" x1="0" x2="1">
+      <stop offset="0%" stop-color="#f8b84b"/>
+      <stop offset="100%" stop-color="#f57c1d"/>
+    </linearGradient>
+  </defs>
+  <rect width="520" height="180" fill="transparent"/>
+  <g transform="translate(8,18)">
+    <rect x="0" y="32" width="134" height="80" rx="18" fill="#111827"/>
+    <path d="M27 72h80c7 0 13 6 13 13v4c0 7-6 13-13 13H27c-7 0-13-6-13-13v-4c0-7 6-13 13-13zm12-26l10-18h36l10 18H39zm-12 30h100v12H27zm18-60h18v14H45zm36 0h18v14H81zm36 0h18v14H117z" fill="url(#gold)"/>
+    <circle cx="93" cy="118" r="11" fill="#f8b84b"/>
+    <circle cx="33" cy="118" r="11" fill="#f8b84b"/>
+    <path d="M13 46l24 16-18 16m102-32L92 62l18 16" stroke="#f8b84b" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+  <g transform="translate(170,42)">
+    <text x="0" y="55" font-size="42" font-weight="900" font-family="Georgia, 'Times New Roman', serif" fill="#1b1b1b" letter-spacing="-1">SD</text>
+    <text x="68" y="55" font-size="42" font-weight="700" font-family="Georgia, 'Times New Roman', serif" fill="#f57c1d" letter-spacing="-1">Travels</text>
+    <text x="2" y="92" font-size="18" font-weight="700" font-family="Arial, sans-serif" fill="#3a3a3a" letter-spacing="3">ONE WAY TAXI SERVICE</text>
+    <line x1="2" y1="105" x2="312" y2="105" stroke="#f57c1d" stroke-width="4" stroke-linecap="round"/>
+  </g>
+</svg>

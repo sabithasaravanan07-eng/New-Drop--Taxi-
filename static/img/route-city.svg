@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440">
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#d9e7df"/><stop offset="1" stop-color="#f0d9b3"/></linearGradient>
+    <linearGradient id="road" x2="0" y2="1"><stop stop-color="#8a8875"/><stop offset="1" stop-color="#4c5148"/></linearGradient>
+  </defs>
+  <rect width="800" height="440" fill="url(#sky)"/>
+  <circle cx="654" cy="90" r="42" fill="#dca65d"/>
+  <path d="M0 276 105 223l91 44 106-86 115 90 98-60 100 65 100-44 85 51v157H0Z" fill="#8f9d7c"/>
+  <path d="M0 320 117 272l112 37 103-70 131 78 107-54 110 55 120-44v166H0Z" fill="#587763"/>
+  <path d="M62 293v-96m0 25-31-27m31 17 32-32m-32 53 37-13m-37-7-34 8M733 286v-88m0 20-30-26m30 15 31-29m-31 49 35-12m-35-7-32 8" fill="none" stroke="#355b48" stroke-linecap="round" stroke-width="8"/>
+  <path d="M282 343h245v97H282Z" fill="#9e573d"/>
+  <path d="M308 343v-28h194v28" fill="#e0bd7b"/>
+  <path d="M298 315 322 278h165l24 37Z" fill="#b96d48" stroke="#814936" stroke-width="4"/>
+  <path d="M320 278 340 242h129l18 36Z" fill="#c17b4f" stroke="#814936" stroke-width="4"/>
+  <path d="M340 242 357 207h95l17 35Z" fill="#bd7048" stroke="#814936" stroke-width="4"/>
+  <path d="M357 207 373 174h63l16 33Z" fill="#cb8150" stroke="#814936" stroke-width="4"/>
+  <path d="M373 174 386 142h37l13 32Z" fill="#bd7048" stroke="#814936" stroke-width="4"/>
+  <path d="M386 142 397 112h15l11 30Z" fill="#cb8150" stroke="#814936" stroke-width="4"/>
+  <path d="m398 112 7-31 8 31Z" fill="#d5a45b" stroke="#814936" stroke-width="3"/>
+  <path d="M307 314h189M324 278h161m-141-36h123m-106-35h89m-73-33h56m-43-32h30" stroke="#e3ba75" stroke-width="4"/>
+  <g fill="#e6c68e" stroke="#84513b" stroke-width="2">
+    <circle cx="342" cy="297" r="7"/><circle cx="375" cy="297" r="7"/><circle cx="408" cy="297" r="7"/><circle cx="441" cy="297" r="7"/><circle cx="474" cy="297" r="7"/>
+    <circle cx="359" cy="261" r="6"/><circle cx="391" cy="261" r="6"/><circle cx="423" cy="261" r="6"/><circle cx="455" cy="261" r="6"/>
+    <circle cx="375" cy="225" r="6"/><circle cx="406" cy="225" r="6"/><circle cx="437" cy="225" r="6"/>
+    <circle cx="391" cy="190" r="5"/><circle cx="421" cy="190" r="5"/>
+    <circle cx="399" cy="157" r="5"/><circle cx="419" cy="157" r="5"/>
+  </g>
+  <path d="M296 343h217v97H296Z" fill="#e8d2a6"/>
+  <path d="M318 440v-64h42v64m51 0v-83h48v83m59 0v-64h42v64" fill="#805942"/>
+  <path d="M393 440v-42a25 25 0 0 1 50 0v42Z" fill="#344c40"/>
+  <path d="M0 365h800v75H0Z" fill="#354b3d"/>
+  <path d="M163 440 310 346h187l153 94Z" fill="url(#road)"/>
+  <path d="m387 440 29-90h17l34 90Z" fill="#e4c273"/>
+</svg>

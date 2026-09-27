@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Admin Dashboard{% endblock %} — {{ 'New Drop Taxi' if biz.name == 'SD Travels' else biz.name }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="admin-shell">
+
+  <aside class="admin-sidebar">
+    <div class="brand">
+      <span class="admin-brand-logo"><img src="{{ url_for('static', filename='img/new-drop-taxi-logo.svg') }}" alt="New Drop Taxi logo"></span>
+      <span class="admin-brand-name">New Drop <strong>Taxi</strong><small>ADMIN PANEL</small></span>
+    </div>
+    <nav class="admin-nav">
+      <a href="{{ url_for('admin_dashboard') }}" class="{{ 'active' if request.endpoint=='admin_dashboard' }}">
+        <i class="fa-solid fa-gauge"></i> Dashboard</a>
+      <a href="{{ url_for('admin_bookings') }}" class="{{ 'active' if request.endpoint=='admin_bookings' }}">
+        <i class="fa-solid fa-calendar-check"></i> Bookings</a>
+      <a href="{{ url_for('admin_reviews') }}" class="{{ 'active' if request.endpoint=='admin_reviews' }}">
+        <i class="fa-solid fa-star"></i> Reviews</a>
+      <a href="{{ url_for('admin_routes') }}" class="{{ 'active' if request.endpoint=='admin_routes' }}">
+        <i class="fa-solid fa-route"></i> Popular Routes</a>
+      <a href="{{ url_for('admin_cars') }}" class="{{ 'active' if request.endpoint=='admin_cars' }}">
+        <i class="fa-solid fa-car"></i> Fleet / Cars</a>
+      <a href="{{ url_for('admin_settings') }}" class="{{ 'active' if request.endpoint=='admin_settings' }}">
+        <i class="fa-solid fa-gear"></i> Settings</a>
+      <a href="{{ url_for('index') }}" target="_blank">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> View Website</a>
+    </nav>
+    <div class="logout-link">
+      <a href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Log Out</a>
+    </div>
+  </aside>
+
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button class="admin-menu-btn"><i class="fa-solid fa-bars"></i></button>
+        <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+      </div>
+      <div style="display:flex; align-items:center; gap:.6em; font-size:.9rem; color:var(--ink-soft);">
+        <i class="fa-solid fa-circle-user" style="font-size:1.4rem; color:var(--ink);"></i>
+        {{ session.get('admin_name', 'Admin') }}
+      </div>
+    </div>
+
+    <div class="admin-content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ 'error' if category=='error' else category }}" data-autohide>
+              <i class="fa-solid {{ 'fa-circle-check' if category=='success' else 'fa-circle-exclamation' }}"></i>
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% block admin_content %}{% endblock %}
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/firebase.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

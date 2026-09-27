@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% from "route_images.html" import route_image_source %}
+{% block content %}
+
+<section class="homepage-hero">
+  <div class="container booking-hero-grid">
+    <div class="booking-hero-copy">
+      <span class="home-eyebrow">NEW DROP TAXI · TAMIL NADU</span>
+      <h1>Your Trusted Drop Taxi</h1>
+      <p>{{ biz.tagline or 'Reliable rides, professional drivers, and convenient one-way trips across Tamil Nadu.' }}</p>
+      <ul class="booking-trust-list">
+        <li><i class="fa-solid fa-circle-check"></i> Clear starting fares</li>
+        <li><i class="fa-solid fa-circle-check"></i> Local, outstation and airport trips</li>
+      </ul>
+    </div>
+
+    <div class="home-booking-panel">
+      <div class="home-booking-heading">
+        <span class="home-eyebrow">PLAN YOUR RIDE</span>
+        <h2>Booking Details</h2>
+      </div>
+      <form method="POST" action="{{ url_for('booking') }}" class="home-booking-form">
+        <input type="hidden" name="trip_type" value="one_way">
+        <div class="home-booking-grid">
+          <div class="form-group">
+            <label for="home_customer_name">Your Name *</label>
+            <input type="text" id="home_customer_name" name="customer_name" class="form-control" autocomplete="name" placeholder="Full name" required>
+          </div>
+          <div class="form-group">
+            <label for="home_phone">Mobile Number *</label>
+            <input type="tel" id="home_phone" name="phone" class="form-control" autocomplete="tel" inputmode="tel" placeholder="Your phone number" required>
+          </div>
+          <div class="form-group">
+            <label for="home_pickup">Pickup Location *</label>
+            <input type="text" id="home_pickup" name="pickup_location" class="form-control" placeholder="e.g. Chennai" required>
+          </div>
+          <div class="form-group">
+            <label for="home_drop">Drop Location *</label>
+            <input type="text" id="home_drop" name="drop_location" class="form-control" placeholder="e.g. Thiruvannamalai" required>
+          </div>
+          <div class="form-group">
+            <label for="home_pickup_date">Pickup Date *</label>
+            <input type="date" id="home_pickup_date" name="pickup_date" class="form-control" min="{{ current_date }}" required>
+          </div>
+          <div class="form-group">
+            <label for="home_pickup_time">Pickup Time *</label>
+            <input type="time" id="home_pickup_time" name="pickup_time" class="form-control" required>
+          </div>
+        </div>
+        <div class="form-group home-passengers-group">
+          <label for="home_passengers">Passengers</label>
+          <input type="number" id="home_passengers" name="passengers" class="form-control" min="1" max="20" value="1">
+        </div>
+        <button type="submit" class="btn btn-primary-orange home-booking-submit"><i class="fa-solid fa-car-side"></i> Request a Taxi</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="home-section why-us-section">
+  <div class="container">
+    <div class="home-section-heading">
+      <span class="home-eyebrow">THE NEW DROP DIFFERENCE</span>
+      <h2>Why Choose Our Services?</h2>
+      <p>Thoughtful service from the first booking detail to the final drop-off.</p>
+    </div>
+    <div class="service-benefits">
+      <article class="service-benefit">
+        <span class="benefit-icon"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+        <h3>Upfront route fares</h3>
+        <p>See starting prices for popular routes and confirm your trip details before travelling.</p>
+      </article>
+      <article class="service-benefit">
+        <span class="benefit-icon"><i class="fa-solid fa-user-shield"></i></span>
+        <h3>Professional drivers</h3>
+        <p>Travel with courteous drivers who know the local roads and outstation routes.</p>
+      </article>
+      <article class="service-benefit">
+        <span class="benefit-icon"><i class="fa-solid fa-route"></i></span>
+        <h3>Trips made for you</h3>
+        <p>Book one-way drops, local rides, airport transfers, or a round trip to suit your plans.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="popular-routes">
+  <div class="container routes-intro">
+    <div class="home-section-heading routes-heading">
+      <span class="home-eyebrow">POPULAR DESTINATIONS</span>
+      <h2>Popular Routes &amp; Prices</h2>
+      <p>Choose a route to start your booking with pickup and drop locations filled in.</p>
+    </div>
+    <div class="routes-intro-gallery" aria-label="Popular route destinations">
+      {% for route in routes[:3] %}
+      <figure class="routes-intro-tile">
+        <img src="{{ route_image_source(route) }}" alt="{{ route.route_name }} destination" loading="eager">
+        <figcaption>{{ route.drop_city }}</figcaption>
+      </figure>
+      {% else %}
+      <figure class="routes-intro-tile">
+        <img src="{{ url_for('static', filename='img/route-city.svg', v='3') }}" alt="Traditional Tamil heritage street">
+        <figcaption>Tamil Nadu</figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="container route-grid">
+    {% include "route_card.html" %}
+  </div>
+</section>
+
+<section class="home-section about-taxi-section">
+  <div class="container about-taxi-content">
+    <div class="about-taxi-mark" aria-hidden="true"><i class="fa-solid fa-car-side"></i></div>
+    <div>
+      <span class="home-eyebrow">ABOUT NEW DROP TAXI</span>
+      <h2>Taxi Services That Fit Your Journey</h2>
+      <p>{{ biz.name }} helps make everyday and long-distance travel simpler with local taxi rides, one-way outstation drops, airport transfers, and round-trip bookings. Tell us where you are going and when you need to leave; our team will follow up to confirm availability and fare details.</p>
+      <a href="{{ url_for('booking') }}" class="text-link">Plan your trip <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<section class="service-areas">
+  <div class="container service-areas-wrap">
+    <h2>Service Areas</h2>
+    <p>One-way taxi service across major cities and travel hubs in {{ biz.area or 'Tamil Nadu, Puducherry, and Bangalore' }}.</p>
+    <div class="service-list">
+      {% set cities = ['Ariyalur','Chengalpattu','Chennai','Coimbatore','Cuddalore','Dharmapuri','Dindigul','Erode','Kallakurichi','Kanchipuram','Kanyakumari','Karur','Krishnagiri','Madurai','Mayiladuthurai','Nagapattinam','Namakkal','Nilgiris','Perambalur','Pudukkottai','Ramanathapuram','Ranipet','Salem','Sivaganga','Thiruvannamalai','Virudhunagar','Ooty','Kodaikanal','Yercaud','Yelagiri','Rameswaram','Thanjavur','Mahabalipuram','Kumbakonam','Courtallam','Hogenakkal','Tiruchendur','Bangalore','Puducherry'] %}
+      {% for city in cities %}
+      <a href="{{ url_for('booking', pickup_location=city) }}" class="service-item">
+        <span class="service-bullet"></span> One Way Taxi {{ city }} <i class="fa-solid fa-arrow-right"></i>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="home-section faq-section">
+  <div class="container faq-layout">
+    <div class="home-section-heading faq-heading">
+      <span class="home-eyebrow">HELPFUL DETAILS</span>
+      <h2>Frequently Asked Questions</h2>
+      <p>Quick answers to common questions about booking a taxi.</p>
+    </div>
+    <div class="faq-list">
+      <details>
+        <summary>How do I book a taxi?</summary>
+        <p>Fill in the Booking Details form above or choose a popular route. We will contact you to confirm your request.</p>
+      </details>
+      <details>
+        <summary>Can I book a one-way trip?</summary>
+        <p>Yes. The homepage form is set up for one-way trips. For round trips, local rides, or airport transfers, use the full booking form.</p>
+      </details>
+      <details>
+        <summary>Are the route prices final?</summary>
+        <p>Route cards show starting fares. The final fare is confirmed based on your pickup details, vehicle choice, and trip requirements.</p>
+      </details>
+      <details>
+        <summary>Which areas do you serve?</summary>
+        <p>We serve cities and popular destinations across Tamil Nadu, including Thiruvannamalai, Ooty, Kodaikanal, and nearby travel hubs.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="home-section homepage-reviews" id="reviews">
+  <div class="container">
+    <div class="reviews-section-head">
+      <div>
+        <span class="home-eyebrow">PASSENGER EXPERIENCES</span>
+        <h2>Reviews from Our Passengers</h2>
+        <p>Real feedback from travellers who have ridden with New Drop Taxi.</p>
+      </div>
+      <a href="{{ url_for('reviews') }}" class="reviews-link">Write a review <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    {% if reviews %}
+    <div class="review-teaser-grid">
+      {% for review in reviews %}
+      <article class="review-teaser">
+        <div class="review-stars" aria-label="Rated {{ review.rating }} out of 5">
+          {% for star in range(review.rating) %}<i class="fa-solid fa-star"></i>{% endfor %}
+          {% for star in range(5 - review.rating) %}<i class="fa-regular fa-star"></i>{% endfor %}
+        </div>
+        <p class="review-teaser-message">&ldquo;{{ review.message }}&rdquo;</p>
+        <div class="review-teaser-author">
+          <strong>{{ review.customer_name }}</strong>
+          <span>{{ review.trip_route or 'Verified traveller' }}</span>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="review-empty">
+      <p>Customer reviews will appear here after approval.</p>
+      <a href="{{ url_for('reviews') }}" class="reviews-link">Share your experience <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}
