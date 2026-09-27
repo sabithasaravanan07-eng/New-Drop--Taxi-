@@ -884,6 +884,14 @@ def sitemap():
 
     return sitemap_xml, 200, {"Content-Type": "application/xml"}
 
+@app.route("/robots.txt")
+def robots():
+    return """User-agent: *
+Allow: /
+
+Sitemap: https://new-drop-taxi-fd38.vercel.app/sitemap.xml
+""", 200, {"Content-Type": "text/plain"}
+
 if __name__ == "__main__":
     app.run(debug=os.environ.get("FLASK_DEBUG") == "1")
 
