@@ -866,6 +866,26 @@ def not_found(error):
 with app.app_context():
     init_db()
 
+@app.route("/sitemap.xml")
+def sitemap():
+    pages = [
+        url_for("index", _external=True),
+        url_for("booking", _external=True),
+        url_for("reviews", _external=True),
+    ]
+
+    sitemap_xml = '<?xml version="1.0" encoding="UTF-8"?>'
+    sitemap_xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+
+    for page in pages:
+        sitemap_xml += f"<url><loc>{page}</loc></url>"
+
+    sitemap_xml += "</urlset>"
+
+    return sitemap_xml, 200, {"Content-Type": "application/xml"}
+
+if __name__ == "__main__":
+    app.run(debug=os.environ.get("FLASK_DEBUG") == "1")
 
 if __name__ == "__main__":
     app.run(debug=os.environ.get("FLASK_DEBUG") == "1")
