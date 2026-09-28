@@ -365,6 +365,15 @@ def safe_next_url(value):
     parsed = urlparse(value or "")
     return value if not parsed.netloc and not parsed.scheme and value.startswith("/") else None
 
+@app.route("/salem-to-chennai-one-way-taxi")
+def salem_to_chennai_taxi():
+    return render_template(
+        "route_seo.html",
+        route_title="Salem to Chennai One Way Taxi",
+        pickup="Salem",
+        drop="Chennai"
+    )
+    )
 
 @app.route("/")
 def index():
