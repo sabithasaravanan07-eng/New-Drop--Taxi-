@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Salem to Chennai One Way Taxi | New Drop Taxi{% endblock %}
+
+{% block content %}
+
+<section class="home-section">
+  <div class="container">
+    <span class="home-eyebrow">ONE WAY TAXI</span>
+
+    <h1>Salem to Chennai One Way Taxi</h1>
+
+    <p>
+      New Drop Taxi provides reliable one way taxi service from Salem to Chennai.
+      Book a comfortable cab for family travel, business trips, airport transfers
+      and other outstation journeys.
+    </p>
+
+    <h2>Salem to Chennai Taxi Service</h2>
+
+    <p>
+      We provide convenient one way cab services from Salem to Chennai and
+      Chennai airport. Choose your pickup location in Salem and travel
+      comfortably to Chennai with a professional driver.
+    </p>
+
+    <h2>Book Your One Way Taxi</h2>
+
+    <p>
+      Enter your pickup and drop details to request a taxi with New Drop Taxi.
+      Fare and vehicle availability will be confirmed based on your trip details.
+    </p>
+
+    <a href="{{ url_for('booking') }}" class="btn btn-primary-orange">
+      Book Your Taxi
+    </a>
+  </div>
+</section>
+
+{% endblock %}
